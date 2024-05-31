@@ -78,20 +78,22 @@ async def thankyou(request: Request):
 async def get_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None):
     try:
         mycursor = mydb.cursor()
-
+        offset = page * 12
         # 執行查詢並根據 keyword 參數過濾數據
         if keyword:
-                sql = "SELECT * FROM attractions WHERE name LIKE %s OR mrt = %s "
-                params = (f"%{keyword}%", keyword)
+                sql = "SELECT * FROM attractions WHERE name LIKE %s OR mrt = %s  LIMIT %s,13; "
+                params = (f"%{keyword}%", keyword , offset)
                 mycursor.execute(sql, params)
         else:
-            mycursor.execute("SELECT * FROM attractions ")
+            sql="SELECT * FROM attractions LIMIT %s,13; "
+            params = (offset,)
+            mycursor.execute(sql, params)
 
         records = mycursor.fetchall()
 
         # 處理查詢結果
         data = []
-        for record in records:
+        for record in records[:12]:
             attraction_dict = {
                 "id": record[0],
                 "name": record[1],
@@ -106,27 +108,14 @@ async def get_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = N
             }
             data.append(Attraction(**attraction_dict))
         
-        #一頁取12筆
         
-        if len(data)%12 == 0: 
-            page_sixe = len(data)//12-1
-            if page_sixe > page:
-                    data_size = data[page*12:page*12+12]
-                    next_page = page+1
-            else:
-                data_size = data[page*12:page*12+12]
-                next_page = None  
-        elif len(data)%12 != 0: 
-            page_sixe = len(data)//12
-            if page_sixe > page:
-                data_size = data[page*12:page*12+12]
-                next_page = page+1  
-            else:
-                data_size = data[page*12:page*12+12]
-                next_page = None
-
+        
+        if len(records) > 12:
+            next_page = page + 1
+        else:
+            next_page = None
     
-        response_data = Response(nextPage=next_page, data=data_size)
+        response_data = Response(nextPage=next_page, data=data)
         return JSONResponse(content=response_data.model_dump())
     
     except Exception as e:
@@ -161,7 +150,6 @@ async def attractionId(attractionId: int ):
         raise e  # 確保自訂的 AttractionIdException 被捕捉並處理
     except Exception as e:
         raise Exception(str(e))
-
 
 
 
