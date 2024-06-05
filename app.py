@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 app=FastAPI()
+"""
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 允许所有来源，可以根据需要进行限制
@@ -21,7 +22,7 @@ app.add_middleware(
     allow_methods=["*"],  # 允许所有方法
     allow_headers=["*"],  # 允许所有 headers
 )
-
+"""
 dbconfig = {
     "database": 'Taipei_Attraction',
     "user": "root",
@@ -30,7 +31,7 @@ dbconfig = {
 }
 cnxpool = pooling.MySQLConnectionPool(
     pool_name="mypool",
-    pool_size=5,  # 可以根據需求調整
+    pool_size=5,  
     **dbconfig
 )
 def get_connection():
