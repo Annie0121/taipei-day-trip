@@ -7,7 +7,7 @@ from typing import Optional
 from fastapi.responses import JSONResponse
 from mysql.connector import pooling
 import config
-
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app=FastAPI()
 
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 dbconfig = {
     "database": 'Taipei_Attraction',
     "user": "root",

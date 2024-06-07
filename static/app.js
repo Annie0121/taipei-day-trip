@@ -70,7 +70,7 @@
         isLoading = true;
         
 
-        fetch(`http://18.221.171.130:8000/api/attractions?page=${page}&keyword=${keyword}`)
+        fetch(`/api/attractions?page=${page}&keyword=${keyword}`)
         .then(response => response.json())
         .then(data => {
             nextPage = data["nextPage"];
@@ -113,7 +113,7 @@
     }
         
     //mrts
-    fetch('http://18.221.171.130:8000/api/mrts')
+    fetch('/api/mrts')
     .then(response => response.json())
     .then(data => {
         let mrt = document.querySelector(".list_item")
