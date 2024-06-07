@@ -63,7 +63,9 @@
 
     function fetchData(page=0,keyword=currentKeyword){
         if (isLoading || page == null) {
-            document.querySelector(".footer").style.display = "block";
+            if (page == null) {
+                document.querySelector(".footer").style.display = "block";
+            }
             return;
         }
     
