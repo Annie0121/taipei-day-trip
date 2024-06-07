@@ -62,12 +62,13 @@
     fetchData();
 
     function fetchData(page=0,keyword=currentKeyword){
-        if (isLoading||page == null) return;
-        
-
-        
-        
+        if (isLoading || page == null) {
+            document.querySelector(".footer").style.display = "block";
+            return;
+        }
+    
         isLoading = true;
+        
 
         fetch(`http://18.221.171.130:8000/api/attractions?page=${page}&keyword=${keyword}`)
         .then(response => response.json())
@@ -75,6 +76,8 @@
             nextPage = data["nextPage"];
             renderAttractions(data["data"]);
             isLoading = false;
+            document.querySelector(".footer").style.display = "none";
+            
         
     });
     }

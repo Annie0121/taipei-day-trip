@@ -14,15 +14,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 app=FastAPI()
-"""
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # 允许所有来源，可以根据需要进行限制
-    allow_credentials=True,
-    allow_methods=["*"],  # 允许所有方法
-    allow_headers=["*"],  # 允许所有 headers
-)
-"""
+
+
 dbconfig = {
     "database": 'Taipei_Attraction',
     "user": "root",
@@ -39,15 +32,7 @@ def get_connection():
 
 
 
-"""
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password= config.password,
-  database='Taipei_Attraction'
-)
-mycursor = mydb.cursor()
-"""
+
 
 
 

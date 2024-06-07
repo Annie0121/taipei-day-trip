@@ -287,6 +287,16 @@ body{
     font-weight: 500;
     font-size: 16px;
 }
+.footer{
+    background-color: rgba(117, 117, 117, 1);
+    font-size: 16px;
+    font-weight: 700;
+    height: 104px;
+    width: 100%;
+    color: rgba(255, 255, 255, 1);
+    text-align: center; 
+    line-height: 104px;
+}
 
 
 @media(max-width:1200px){
