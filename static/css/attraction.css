@@ -1,0 +1,364 @@
+body{
+    margin: 0 ;
+    width: 100%;  
+}
+.header{
+    height: 54px;
+    width: 100%;
+}
+.header_content{
+    display: flex;
+    margin: 0 auto;
+    height: 34px;
+    padding-top: 10px;
+    width: 1200px;
+    justify-content: space-between;
+    
+    
+}
+
+.header_name{
+    color: rgba(68, 136, 153, 1);
+    font-weight:  700;
+    font-size: 30px;
+    height: 34px;
+    cursor: pointer;
+}
+
+
+.heade_frame{
+    right: 175px;
+    width: 175px;
+    height: 34px;
+    display: flex;
+    
+    align-content:center;
+    /*
+    border: 1px solid rgba(0, 0, 0, 1);*/
+
+    
+}
+
+.heade_frame_book{
+    width: 84px;
+}
+
+.heade_frame_log{
+    width: 91px;
+}
+
+.section{
+    width: 1200px;
+    height: 400px;
+    
+    margin: 0 auto;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
+
+}
+/*attraction*/
+
+.attraction{
+    width: 540px;
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+    
+}
+.attraction_img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    
+    
+}
+.attraction_img_button{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-16px);
+    position: absolute;
+    top:50%; 
+    
+    
+}
+.attraction_img_button_left{
+   width: 36px;
+   height: 36px;
+   margin-left: 10px;
+   opacity: 75%;
+}
+.attraction_img_button_left:hover{
+    cursor :pointer;
+    opacity: 1;
+}
+.attraction_img_button_right{
+   width: 36px;
+   height: 36px;
+   margin-right: 10px;
+   opacity: 75%;
+}
+.attraction_img_button_right:hover{
+    cursor :pointer;
+    opacity: 1;
+}
+.attraction_img_circle{
+    list-style: none;
+    display: flex;
+    position: absolute;
+    margin-bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%); 
+    bottom: 0;
+    
+    
+    
+}
+.attraction_img_circle li{
+    background-color:  rgba(255, 255, 255, 1);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+    
+}
+.attraction_img_circle li.active{
+    border: 1px solid rgba(255, 255, 255, 1);
+    background-color:  rgba(0, 0, 0, 1);
+    
+}
+
+
+
+
+/*profile*/
+.attraction_profile{
+    width: 600px;
+    height: 400px;
+   
+    
+
+}
+.attraction_profile_name{
+    font-size: 24px;
+    font-weight: 700;
+    color: rgba(102, 102, 102, 1);
+    
+}
+.attraction_profile_place{
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(102, 102, 102, 1);
+    margin-top: 15px;
+}
+/*attraction_booking*/
+.attraction_booking{
+    background-color: rgba(232, 232, 232, 1);
+    width: 580px;
+    height: 302px;
+    border-radius: 5px ;
+    margin-top: 20px;
+    padding-left: 20px;
+}
+.attraction_booking_first{
+   padding-top: 15px;
+   color: rgba(102, 102, 102, 1);
+   font-size: 16px;
+   font-weight: 700;
+}
+.attraction_booking_second{
+    padding-top: 15px;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(102, 102, 102, 1);
+}
+.attraction_booking_date{
+    padding-top: 15px;
+    height: 35px;
+}
+.attraction_booking_date_word{
+    font-size: 16px;
+    font-weight: 700;
+    color: rgba(102, 102, 102, 1);
+}
+.attraction_booking_date_input{
+    width: 193px;
+    box-sizing: border-box;
+    height: 100%;
+    margin-left: 5px;
+}
+.attraction_booking_time{
+    padding-top: 15px;
+    display: flex;
+    align-items: center;
+    
+}
+.time{
+    font-size: 16px;
+    font-weight: 700;
+    color: rgba(102, 102, 102, 1);
+    
+}
+.radio_btn{
+    display: none;
+}
+.radio_label{
+    position: relative;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    padding-left: 35px;
+    color: rgba(102, 102, 102, 1);
+}
+.radio_label::before{
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 1);
+    left: 0;
+    margin-left: 10px;
+}
+.radio_btn:checked + .radio_label:before {
+    background-color:rgba(68, 136, 153, 1);
+    width: 22px;
+    height: 22px;
+    border: 2px solid rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+}
+
+
+
+
+
+.attraction_booking_fee{
+    padding-top: 15px;
+}
+.attraction_booking_fee_word{
+    font-size: 16px;
+    font-weight: 700;
+    color: rgba(102, 102, 102, 1);
+
+}
+.attraction_booking_fee_total{
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(102, 102, 102, 1);
+    margin-left: 5px;
+    
+
+}
+
+.attraction_booking_button{
+    margin-top: 25px;
+    width: 154px;
+    height: 36px;
+    background-color: rgba(68, 136, 153, 1);
+    border-radius: 5px;
+    font-size: 19px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.attraction_booking_button:hover{
+    cursor :pointer;
+}
+
+/*infors*/
+.infors{
+    width: 1200px;
+    margin: 40px auto;
+}
+.infors_cont{
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(102, 102, 102, 1);
+}
+.infors_title{
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 20px;
+    color: rgba(102, 102, 102, 1);
+}
+.footer{
+    background-color: rgba(117, 117, 117, 1);
+    font-size: 16px;
+    font-weight: 700;
+    height: 104px;
+    width: 100%;
+    color: rgba(255, 255, 255, 1);
+    text-align: center; 
+    line-height: 104px;
+}
+.second_hr{
+    border: 1px solid rgba(232, 232, 232, 1);
+    width: 1200px;
+    margin-top: 40px;
+    box-sizing: border-box;
+}
+.first_hr{
+    width: 100%; 
+    border: 1px solid rgba(232, 232, 232, 1) ;
+    margin-top: 0;
+    box-sizing: border-box;
+}
+
+@media(max-width:1200px){
+    .header_content {
+        width: 95%;
+    }
+    .section{
+        width: 90%; 
+    }
+    .infors{
+        width: 90%;
+    }
+    .second_hr{
+        width: 95%;
+    }
+    
+    .attraction_booking{
+        width: 95%;
+    }
+    .attraction{
+        width: 45%
+    }
+    .attraction_profile{
+        width: 50%
+    }
+}
+
+@media(max-width:750px){
+  .section{
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top:0 ;
+    height: 760px;
+  }
+  .attraction{
+    width: 100%;
+    height: 350px;
+  }
+  .first_hr{
+    display: none;
+  }
+  .attraction_profile{
+        margin-left: 10px;
+        margin-top: 20px;
+        margin-right: 10px;
+        height: 390px;
+        width: 100%;
+  }
+  .attraction_booking{
+    width: 100%;
+    box-sizing: border-box
+  }
+  .attraction_booking_second{
+    margin-right: 20px;
+  }
+  
+}
