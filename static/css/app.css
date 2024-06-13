@@ -8,7 +8,6 @@ body{
 }
 .header_content{
     display: flex;
-    
     margin: 0 auto;
     height: 34px;
     padding-top: 10px;
@@ -235,6 +234,9 @@ body{
     border-radius: 1px;
     border: 1px solid rgba(232, 232, 232, 1);
 }
+.attractions_group:hover{
+    cursor :pointer;
+}
 .attractions_img{
     width: 270px;
     height: 197px;
@@ -351,7 +353,8 @@ body{
 
 
 }
-@media(max-width:360px){
+
+@media(max-width:500px){
     .header_content {
         width: 100%;
     }

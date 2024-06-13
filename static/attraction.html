@@ -4,8 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attraction</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/attraction.css">
 </head>
 <body>
+  <div class="header" >
+    <div class="header_content">
+        <div class="header_name">台北一日遊</div>
+        <div class="heade_frame">
+            <div class="heade_frame_book">
+                <div style="padding: 10px;font-size: 16px;">預定行程</div>
+            </div>
+            <div class="heade_frame_log">
+                <div style="padding: 10px;font-size: 16px;">登入/註冊</div>
+            </div>
+        </div>
+    </div>
+  
+</div>
+
+<hr class="first_hr"> 
+<div class="section">
+  <div class="attraction">
+    <img class="attraction_img" src="">
+    <div class="attraction_img_button">
+      <img  class="attraction_img_button_left" src="/static/img/attraction_button_left.png">
+      <img class="attraction_img_button_right" src="/static/img/attraction_button_right.png">
+    </div>
+    <ul class="attraction_img_circle">
+      <!--
+      <li class="active"></li>
+      <li></li>
+      <li></li>-->
+    </ul>
+  </div>
+  <div class="attraction_profile">
+    <div class="attraction_profile_name"></div>
+    <div class="attraction_profile_place"></div>
+    <div class="attraction_booking">
+      <div class="attraction_booking_first">訂購導覽行程</div>
+      <div class="attraction_booking_second">以此景點為中心的一日行程，帶您探索城市角落故事</div>
+      <div class="attraction_booking_date">
+        <span class="attraction_booking_date_word">選擇日期：</span>
+        <input type="date" class="attraction_booking_date_input" >
+      </div>
+
+      <div class="attraction_booking_time">
+        <div class="time">選擇時間：</div >
+        <input type="radio" id="option1" class="radio_btn" name="option" >
+        <label for="option1" class="radio_label">上半天</label>
+        <input type="radio" id="option2" class="radio_btn" name="option" >
+        <label for="option2" class="radio_label">下半天</label>
+      </div>
+
+      <div class="attraction_booking_fee">
+        <span class="attraction_booking_fee_word">導覽費用：</span>
+        <span class="attraction_booking_fee_total"></span>
+      </div>
+      <div class="attraction_booking_button">開始預約行程</div>
+    </div>
+  </div>
+</div>
+<hr class="second_hr">
+<div class="infors">
+  <div class="infors_cont" id="att_desc"></div>
+  <div class="infors_title">景點地址：</div>
+  <div class="infors_cont" id="att_address"></div>
+  <div class="infors_title">交通方式：</div>
+  <div class="infors_cont" id="att_mrt"></div>
+</div>
+<div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+
+<script src="/static/js/attraction.js"></script>
   
 </body>
 </html>

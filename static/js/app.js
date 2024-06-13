@@ -91,8 +91,10 @@
             imgname = data[i]["name"];
             mrt = data[i]["mrt"];
             cate =data[i]["category"];
+            let attractionId = data[i]["id"];
             const group = document.createElement('div');
             group.className = 'attractions_group';
+            group.id = attractionId;
             group.innerHTML = `
             <div class="attractions_group">
                 <div class="attractions_img">
@@ -111,6 +113,10 @@
             </div>
             `;
             attractions.appendChild(group);
+            group.addEventListener('click', function() {
+                window.location.href = window.location.href+'attraction/'+group.id;
+                ;
+            });
         }
     }
         
@@ -119,7 +125,6 @@
     .then(response => response.json())
     .then(data => {
         let mrt = document.querySelector(".list_item")
-        
         for(i=0;i<data["data"].length;i++){
             
             let div = document.createElement('div');
@@ -128,7 +133,6 @@
             
             div.addEventListener('click', function() {
                 currentKeyword = div.textContent ;
-                
                 search.value=`${currentKeyword}`
                 attractions.innerHTML = ''; 
                 fetchData(0,`${currentKeyword}`);
@@ -157,8 +161,6 @@
     //螢幕滾動載入
     window.addEventListener('scroll', () => {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight ) {
-            
-            
             fetchData(nextPage,currentKeyword)
             
             }
