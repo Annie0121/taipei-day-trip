@@ -172,6 +172,9 @@
             });
             
         })
+    }else{
+        login.style.display = "block";
+        signout.style.display = "none";
     }
     //localStorage.removeItem('token')
         
