@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Index</title>
-  <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/index.css">
 </head>
 <body>
   <div class="header" >
@@ -15,12 +15,48 @@
                   <div style="padding: 10px;font-size: 16px;">預定行程</div>
               </div>
               <div class="heade_frame_log">
-                  <div style="padding: 10px;font-size: 16px;">登入/註冊</div>
+                  <div id="login" style="padding: 10px;font-size: 16px;cursor: pointer">登入/註冊</div>
+                  <div id="signout" style="padding: 10px;font-size: 16px;cursor: pointer; display:none;">登出系統</div>
               </div>
           </div>
       </div>
   </div>
+  <!--登入畫面-->
+  <div class="login_dialog_background"  >
+        <div class="login_dialog" >
+            <div class="dialog_bar"></div>
+            <div class="dialog_main">
+                <div class="dialog_main_title">登入會員帳號</div>
+                <img id="CloseLogin" class="dialog_main_close"  src="/static/img/close.png">
+                <input class="dialog_main_email" placeholder="輸入電子郵件" id="signinEmail" >
+                <input class="dialog_main_password" placeholder="輸入密碼" id="signinPassword"type="password">
+                <button class="dialog_main_button" id="singin" >登入帳號</button>
+                <div class="dialog_main_register" id="signup">還沒有帳戶？<span class="signup_button">點此註冊</span></div>
+            </div>
+        </div>
+  </div>
+<!--註冊畫面-->
+<div class="signup_dialog_background"  >
+    <div class="signup_dialog">
+        <div class="dialog_bar"></div>
+        <div class="dialog_main">
+            <div class="dialog_main_title">註冊會員帳號</div>
+            <img id="CloseSignup" class="dialog_main_close"  src="/static/img/close.png">
+            <input class="dialog_main_name" placeholder="輸入姓名" id="signupUname">
+            <input class="signup_dialog_main_email" placeholder="輸入電子郵件" id="signupEmail">
+            <input class="dialog_main_password" placeholder="輸入密碼" id="signupPassword" type="password">
+            <button class="dialog_main_button" id="signupNew">註冊新帳號</button>
+            <div class="dialog_main_register" id="login">已經有帳戶了？<span class="login_button">點此登入</span></div>
+        </div>
+    </div>
+</div>
   
+  
+  
+
+
+
+
   <div class="welcome">
       <img class="welcome_img" src="/static/img/image.png">
       <div class="welcome_content">
@@ -65,7 +101,7 @@
       -->
   </div>
   <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
-  <script src="/static/js/app.js"></script>
+  <script src="/static/js/index.js"></script>
 
 
   
