@@ -8,7 +8,11 @@ from fastapi.responses import JSONResponse
 from mysql.connector import pooling
 import config
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
+
+import jwt
+from fastapi.security import OAuth2PasswordBearer
+from jwt import PyJWTError
+
 
 
 
@@ -24,7 +28,7 @@ dbconfig = {
 }
 cnxpool = pooling.MySQLConnectionPool(
     pool_name="mypool",
-    pool_size=5,  
+    pool_size=20,  
     **dbconfig
 )
 def get_connection():
@@ -60,6 +64,40 @@ class AttractionIdException(Exception):
     def __init__(self, message: str):
         self.message = message
 
+
+
+#註冊模組
+class User(BaseModel):
+    name: str
+    email: str
+    password: str
+
+#登入模組
+class Member(BaseModel):
+    email: str
+    password: str
+
+#定義JWT常數
+SECRET_KEY = "hkjHUEHFUIWorhjgi45645"
+ALGORITHM = "HS256"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+#創建JWT函數
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+#前端訊息處理
+def verify_token(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except PyJWTError:
+        return None
+    
+
+
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception):
     return JSONResponse(
@@ -76,6 +114,7 @@ async def attraction_id_exception_handler(request: Request, exc: AttractionIdExc
         status_code=400,
         content={"error": True, "message": exc.message}
     )
+
 
 
 # Static Pages (Never Modify Code in this Block)
@@ -213,6 +252,90 @@ async def get_mrts():
             cursor.close()
         if conn:
             conn.close()  
+
+
+
+#註冊會員
+
+@app.post("/api/user")
+async def signup(user: User):
+    if not user.name or not user.email or not user.password:
+        return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
+    try:
+        
+        conn = get_connection()
+        cursor = conn.cursor()
+        sql = "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)"
+        params = (user.name, user.email, user.password)
+        check_sql = "SELECT email FROM users WHERE email = %s"
+        cursor.execute(check_sql, (user.email,))
+        records = cursor.fetchall()
+        
+        if records:
+            return JSONResponse(content={"error":True,"message": "Email 已註冊"})
+        cursor.execute(sql, params)
+        conn.commit()
+        
+        return JSONResponse(content={"ok":True})
+    
+    except Exception as e:
+        raise Exception(str(e))
+    
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
+#驗證前端token
+@app.get("/api/user/auth")
+async def check_user(user: str = Depends(verify_token)):
+    return {"data": user}
+    
+    
+    
+
+
+
+
+#登入會員
+@app.put("/api/user/auth")
+async def signin(user:Member):
+    try:
+        print(f"Received user:  {user.email}, {user.password}")
+        conn = get_connection()
+        cursor = conn.cursor()
+        sql = "SELECT id,email,password from users WHERE  email = %s and password = %s;"
+        params = ( user.email, user.password)
+        cursor.execute(sql, params)
+        records = cursor.fetchone()
+        if records:
+            access_token = create_access_token(
+                data={
+                    
+                    "id": records[0],
+                    "email": records[1],
+                    "password": records[2],
+                    
+                }
+            )
+            return {"token": access_token}
+        else:
+            return {
+                "error": True,
+                "message": "信箱或密碼錯誤"
+            }
+    except Exception as e:
+        raise Exception(str(e))
+    
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
 
 if __name__ == '__main__':
     uvicorn.run(app="app:app", reload=True)
