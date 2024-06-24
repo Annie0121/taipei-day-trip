@@ -10,7 +10,7 @@ btn2.addEventListener("click",function(){
 })
 /*
 let url = window.location.pathname;*/
-attractionId =  window.location["href"].split('/')[4];
+const attractionId =  window.location["href"].split('/')[4];
 
 
 //畫面選染
@@ -85,142 +85,12 @@ back.addEventListener("click",function(){
 
 
 
-//導向登入註冊
-let login = document.querySelector("#login")
-login.addEventListener("click",()=>{
-   
-   document.querySelector(".login_dialog_background").style.display= 'block';
-})
-
-//切換登入/註冊畫面
-let signupButton = document.querySelector('.signup_button')
-let loginButton =document.querySelector(".login_button")
-
-let CloseSignup = document.querySelector("#CloseSignup")
-signupButton.addEventListener("click",()=>{
-    document.querySelector(".signup_dialog_background").style.display = 'block';
-    document.querySelector(".login_dialog_background").style.display = " none";
-    
-})
-CloseSignup.addEventListener("click",()=>{
-    document.querySelector(".signup_dialog_background").style.display = 'none';
-})
-
-let CloseLogin = document.querySelector("#CloseLogin")
-loginButton.addEventListener("click",()=>{
-    document.querySelector(".signup_dialog_background").style.display = 'none';
-    document.querySelector(".login_dialog_background").style.display = " block";
-})
-CloseLogin.addEventListener("click",()=>{
-    document.querySelector(".login_dialog_background").style.display = "none";
-})
- //註冊資料給後端
- let signup= document.querySelector("#signupNew");
- signup.addEventListener("click",async()=>{
-     let name = document.getElementById("signupUname").value;
-     let email = document.getElementById("signupEmail").value;
-     let password = document.getElementById("signupPassword").value;
-     
-     const response = await fetch('/api/user', {
-         method: 'POST',
-         headers: {
-             'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({ name, email, password }),
-     });
- 
-     const result = await response.json();
-     console.log(result);
-     //註冊成功導向登入
-     document.getElementById("signupUname").value=""
-     document.getElementById("signupEmail").value =""
-     document.getElementById("signupPassword").value=""
-     let failSignup = document.querySelector(".fail_signup");
-     if (failSignup) {
-         failSignup.remove();
-     }
-
-     failSignup = document.createElement("div");
-     failSignup.className = "fail_signup";
-     failSignup.textContent = result.message;
-     signup.insertAdjacentElement('afterend', failSignup);
-
-
-     if (result.ok == true) {
-         failSignup.style.color = "green";
-         failSignup.textContent = "會員註冊成功";
-         
-     }else {
-         failSignup.textContent = result.message;
-     }
- })  
-
-
- //會員登入給後端
- let singin = document.querySelector("#singin");
- singin.addEventListener("click",async()=>{
-     let email = document.querySelector("#signinEmail").value;
-     let password = document.querySelector("#signinPassword").value;
-     const response = await fetch('/api/user/auth', {
-         method: 'PUT',
-         headers: {
-             'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({ email, password }),
-     });
- 
-     const result = await response.json();
-     console.log(result);
-     
-     if(!result.token){
-         document.getElementById("signinEmail").value =""
-         document.getElementById("signinPassword").value=""
-         let failSignin = document.querySelector(".fail_signup");
-         if (failSignin) {
-             failSignin.remove();
-         }
-         failSignin = document.createElement("div");
-         failSignin.className = "fail_signup";
-         failSignin.textContent = result.message;
-         singin.insertAdjacentElement('afterend', failSignin);
-         
-     }else{
-         localStorage.setItem('token',result.token );
-         window.location.reload();
-     }
- })
-
-
-
- 
-
- 
-let token = localStorage.getItem('token');
-let signout = document.querySelector('#signout');
-
-if (token) {
-  fetch("/api/user/auth", {
-      method: 'GET',
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-      },
-  }).then(response => {
-      // 將後端的響應印出
-      if (response.ok) {  // 如果後端的響應存在
-          login.style.display = "none";
-          signout.style.display = "block";
-      }else{
-          login.style.display = "block";
-          signout.style.display = "none";
-      }
-      signout.addEventListener("click", () => {
-          localStorage.removeItem('token');
-          window.location.reload();
-      });
-      
-  })
-}else{
-    login.style.display = "block";
-    signout.style.display = "none";
-}
+import{loginDialog,CloseSignup,CloseLogin,changeSignup,changeLogin,checkSignup,signinCheck, checkToken}from './event.js';
+loginDialog();
+CloseSignup();
+CloseLogin();
+changeSignup();
+changeLogin();
+checkSignup();
+signinCheck();
+checkToken();
