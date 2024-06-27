@@ -52,7 +52,7 @@ fetch("/api/booking", {
     // 使用 data 來渲染畫面
     if(!data){
         booking_nodata.style.display="block";
-        footer.style.height = "100vw"
+        footer.style.height = "67.5vh"
     }else{
         
         booking.style.display="block";

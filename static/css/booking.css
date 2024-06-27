@@ -390,6 +390,8 @@ body{
     width: 1000px;
     color:  rgba(102, 102, 102, 1);
     display: none;
+    font-size: 16px;
+    font-weight: 400;
 }
 @media(max-width:1200px){
     .header_content {
@@ -405,6 +407,9 @@ body{
         width: 90%;
     }
     .headline{
+        width: 90%
+    }
+    .booking_nodata{
         width: 90%
     }
     .booking_section {
@@ -457,6 +462,9 @@ body{
     }
     .headline {
         
+        margin-left: 10px;
+    }
+    .booking_nodata{
         margin-left: 10px;
     }
     .second_hr{
