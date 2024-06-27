@@ -4,8 +4,133 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/booking.css">
 </head>
 <body>
+<div class="header" >
+    <div class="header_content">
+        <div class="header_name">台北一日遊</div>
+        <div class="heade_frame">
+            <div class="heade_frame_book">
+                <div id="reservation" style="padding: 10px;font-size: 16px;cursor: pointer">預定行程</div>
+            </div>
+            <div class="heade_frame_log">
+                <div id="login" style="padding: 10px;font-size: 16px;cursor: pointer; display:none;">登入/註冊</div>
+                <div id="signout" style="padding: 10px;font-size: 16px;cursor: pointer; display:none;">登出系統</div>
+            </div>
+         </div>
+    </div> 
+</div>
+<!--登入畫面-->
+<div class="login_dialog_background"  >
+  <div class="login_dialog" >
+      <div class="dialog_bar"></div>
+      <div class="dialog_main">
+          <div class="dialog_main_title">登入會員帳號</div>
+          <img id="CloseLogin" class="dialog_main_close"  src="/static/img/close.png">
+          <input class="dialog_main_email" placeholder="輸入電子郵件" id="signinEmail" >
+          <input class="dialog_main_password" placeholder="輸入密碼" id="signinPassword"type="password">
+          <button class="dialog_main_button" id="singin" >登入帳號</button>
+          <div class="dialog_main_register" id="signup">還沒有帳戶？<span class="signup_button">點此註冊</span></div>
+      </div>
+  </div>
+</div>
+<!--註冊畫面-->
+<div class="signup_dialog_background"  >
+<div class="signup_dialog">
+  <div class="dialog_bar"></div>
+  <div class="dialog_main">
+      <div class="dialog_main_title">註冊會員帳號</div>
+      <img id="CloseSignup" class="dialog_main_close"  src="/static/img/close.png">
+      <input class="dialog_main_name" placeholder="輸入姓名" id="signupUname">
+      <input class="signup_dialog_main_email" placeholder="輸入電子郵件" id="signupEmail">
+      <input class="dialog_main_password" placeholder="輸入密碼" id="signupPassword" type="password">
+      <button class="dialog_main_button" id="signupNew">註冊新帳號</button>
+      <div class="dialog_main_register" id="login">已經有帳戶了？<span class="login_button">點此登入</span></div>
+  </div>
+</div>
+</div>
+<hr class="first_hr"> 
+<!--預約畫面-->
+<div class="headline"></div>
+<!--沒資料畫面-->
+<div class="booking_nodata">目前沒有任何特定的行程</div>
+
+<!--有資料畫面-->
+<div style="display: none;" id="booking">
+    <div class="booking_section">
+        <div class="booking_section_picture">
+            <img id="bookingimg" style="width: 100%;height: 100%; object-fit:cover">
+        </div>
+        <div class="booking_section_info">
+            <div class="booking_section_info_name">
+                <div class="booking_section_info_name_text">台北一日遊：<span id="name"></span></div>
+                <img id="deleteBooking" style="height: 30px;width: 30px;cursor: pointer;" src="/static/img/delete.png"> 
+            </div>
+            <div class="booking_section_info_date">
+                <span class="booking_section_info_date_title">日期：</span>
+                <span class="booking_section_info_date_text" id="date"></span>
+            </div>
+            <div class="booking_section_info_frame">
+                <span class="booking_section_info_frame_title">時間：</span>
+                <span class="booking_section_info_frame_text" id="time"></span>
+            </div>
+            <div class="booking_section_info_frame">
+                <span class="booking_section_info_frame_title">費用：</span>
+                <span class="booking_section_info_frame_text" id="fee"></span>
+            </div>
+            <div class="booking_section_info_frame">
+                <span class="booking_section_info_frame_title">地點：</span>
+                <span class="booking_section_info_frame_text" id="address"></span>
+            </div>
+        </div>
+    </div>
+
+    
+    <hr class="second_hr">
+    <!--聯絡資訊-->
+    <div class="booking_contact">
+        <div class="booking_contact_title">您的聯絡資訊</div>
+        <div style="margin-top: 20px;">
+            <span class="booking_contact_name" >聯絡姓名：</span>
+            <input class="booking_contact_name_input" id="bookingName">
+        </div>
+        <div style="margin-top: 15px;">
+            <span class="booking_contact_name">連絡信箱：</span>
+            <input class="booking_contact_name_input" id="bookingEmail">
+        </div>
+        <div style="margin-top: 15px;">
+            <span class="booking_contact_name">手機號碼：</span>
+            <input class="booking_contact_name_input">
+        </div>
+        
+        <div class="booking_contact_notice"  >請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
+    </div>
+    <!--付款資料-->
+    <hr class="second_hr">
+    <div class="booking_payment">
+        <div class="booking_payment_title">信用卡付款資訊</div>
+        <div style="margin-top: 20px;">
+            <span class="booking_payment_name">卡片號碼：</span>
+            <input class="booking_payment_name_input" placeholder="**** **** **** ****">
+        </div>
+        <div style="margin-top: 15px;">
+            <span class="booking_payment_name">過期時間：</span>
+            <input class="booking_payment_name_input" placeholder="MM / YY">
+        </div>
+        <div style="margin-top: 15px;">
+            <span class="booking_payment_name">驗證密碼：</span>
+            <input class="booking_payment_name_input" placeholder="CVV">
+        </div>
+    </div>
+    <hr class="second_hr">
+    <div  class="booking_total">
+        <div class="booking_total_price"></div>
+        <button class="booking_total_button">確認訂購並付款</button>
+    </div>
+</div>
+<div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+<script  type="module" src="/static/js/book.js"></script>
   
 </body>
 </html>

@@ -130,8 +130,38 @@ export const signinCheck=()=>{
 
 //確認token渲染畫面
 let signout = document.querySelector('#signout');
+export const fetchAuth=()=>{
+    return fetch('/api/user/auth',{
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":`Bearer ${token}`
+        },
+    })
+}
+
+export const getResponse=()=>{
+    return fetchAuth().then(response=>{
+        console.log(response);
+        if(response.ok){
+            login.style.display = "none";
+            signout.style.display = "block";
+            return response.json();
+        }else{
+            login.style.display = "block";
+            signout.style.display = "none";
+            return null;
+        }
+       
+    })
+}
+
+
+
+let token = localStorage.getItem('token');
+/*
 export const checkToken=()=>{
     let token = localStorage.getItem('token');
+    
     if (token) {
         fetch("/api/user/auth", {
             method: 'GET',
@@ -152,11 +182,26 @@ export const checkToken=()=>{
                 localStorage.removeItem('token');
                 window.location.reload();
             });
+
             
         })
     }else{
         login.style.display = "block";
         signout.style.display = "none";
     }
-}
+}*/
 
+//預定行程
+let reservation = document.querySelector("#reservation");
+export const bookTrip=()=>{
+    reservation.addEventListener("click",()=>{
+        let token = localStorage.getItem('token');
+        if(!token){
+            document.querySelector(".login_dialog_background").style.display= 'block'; 
+        }else{
+            window.location.href =window.location.href = "/booking"
+        }
+        
+    })
+
+}

@@ -1,6 +1,6 @@
 //點擊價格
-let btn1 = document.querySelector("#option1");
-let btn2 = document.querySelector("#option2");
+let btn1 = document.querySelector("#morning");
+let btn2 = document.querySelector("#afternoon");
 let total = document.querySelector(".attraction_booking_fee_total");
 btn1.addEventListener("click",function(){
    total.innerHTML='新台幣 2000 元'
@@ -82,10 +82,9 @@ back.addEventListener("click",function(){
   window.location.href = window.location.origin;
 })
 
-
-
-
-import{loginDialog,CloseSignup,CloseLogin,changeSignup,changeLogin,checkSignup,signinCheck, checkToken}from './event.js';
+let login = document.querySelector("#login")
+let token = localStorage.getItem('token');
+import{loginDialog,CloseSignup,CloseLogin,changeSignup,changeLogin,checkSignup,signinCheck, getResponse,bookTrip}from './event.js';
 loginDialog();
 CloseSignup();
 CloseLogin();
@@ -93,4 +92,61 @@ changeSignup();
 changeLogin();
 checkSignup();
 signinCheck();
-checkToken();
+
+bookTrip();
+if(token){
+  getResponse();
+}else{
+  login.style.display = "block";
+  signout.style.display = "none";
+}
+
+signout.addEventListener("click", () => {
+  localStorage.removeItem('token');
+  window.location.reload();
+});
+
+//開始預訂行程
+
+let booking = document.querySelector(".attraction_booking_button");
+
+booking.addEventListener("click",()=>{
+  
+  let date = document.querySelector(".attraction_booking_date_input").value;
+  let time = document.querySelector('input[name="option"]:checked') ? document.querySelector('input[name="option"]:checked').id : null;
+  let price = total?  total.textContent.split(" ")[1] :null
+  
+  if (!date || !time || !price) {
+    alert("請輸入完整資料");
+    return; // 如果有一個沒有填寫，不執行後續操作
+  }
+
+  //給後端預約的格式
+  let bookinginfo={
+    "attractionId": attractionId,
+    "date": date,
+    "time": time,
+    "price": price
+  }
+  //確認預定資料
+  fetch("/api/booking",{
+    method:"POST",
+    headers:{
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`
+    },
+    body:JSON.stringify(bookinginfo)
+  }).then(
+    response=>response.json()
+  ).then(data=>{
+    //未授權跳出登入畫面
+    if(data.message=="未授權"){
+      document.querySelector(".login_dialog_background").style.display= 'block';
+    }else if(data.ok){
+      window.location.href = "/booking";
+    }else{
+      console.log(data.message);
+    }
+    
+  })
+})

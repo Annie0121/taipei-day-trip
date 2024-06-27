@@ -35,8 +35,10 @@ listLeft.addEventListener("click", function() {
 
 
     
-
-import{loginDialog,CloseSignup,CloseLogin,changeSignup,changeLogin,checkSignup,signinCheck, checkToken}from './event.js';
+let login = document.querySelector("#login")
+let token = localStorage.getItem('token');
+import{loginDialog,CloseSignup,CloseLogin,changeSignup,getResponse,
+    changeLogin,checkSignup,signinCheck, bookTrip}from './event.js';
 loginDialog();
 CloseSignup();
 CloseLogin();
@@ -44,8 +46,19 @@ changeSignup();
 changeLogin();
 checkSignup();
 signinCheck();
-checkToken();
 
+bookTrip();
+if(token){
+    getResponse();
+  }else{
+    login.style.display = "block";
+    signout.style.display = "none";
+  }
+  
+  signout.addEventListener("click", () => {
+    localStorage.removeItem('token');
+    window.location.reload();
+  });
 
 
 
