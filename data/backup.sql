@@ -48,6 +48,38 @@ INSERT INTO `attractions` VALUES (1,'新北投溫泉區','養生溫泉','北投�
 UNLOCK TABLES;
 
 --
+-- Table structure for table `bookings`
+--
+
+DROP TABLE IF EXISTS `bookings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bookings` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'Unique ID',
+  `user_id` bigint NOT NULL,
+  `attraction_id` bigint NOT NULL,
+  `date` date NOT NULL,
+  `time` varchar(10) NOT NULL,
+  `price` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `attraction_id` (`attraction_id`),
+  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attractions` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bookings`
+--
+
+LOCK TABLES `bookings` WRITE;
+/*!40000 ALTER TABLE `bookings` DISABLE KEYS */;
+INSERT INTO `bookings` VALUES (14,1,20,'2024-06-13','afternoon',2500);
+/*!40000 ALTER TABLE `bookings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -60,7 +92,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL COMMENT 'Email',
   `password` varchar(255) NOT NULL COMMENT 'Password',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,6 +101,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'1','2','3'),(2,'annie','annie@gmail.com','123');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -81,4 +114,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-21 11:57:02
+-- Dump completed on 2024-06-27 17:37:52

@@ -14,7 +14,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError
 
 
-
+bookings_db = {}
 
 
 app=FastAPI()
@@ -76,6 +76,15 @@ class User(BaseModel):
 class Member(BaseModel):
     email: str
     password: str
+
+
+#預約模組
+class Booking(BaseModel):
+    attractionId: int
+    date: str
+    time: str
+    price: int
+    
 
 #定義JWT常數
 SECRET_KEY = "hkjHUEHFUIWorhjgi45645"
@@ -303,21 +312,21 @@ async def check_user(user: str = Depends(verify_token)):
 @app.put("/api/user/auth")
 async def signin(user:Member):
     try:
-        print(f"Received user:  {user.email}, {user.password}")
+        
         conn = get_connection()
         cursor = conn.cursor()
-        sql = "SELECT id,email,password from users WHERE  email = %s and password = %s;"
+        sql = "SELECT id,email,name from users WHERE  email = %s and password = %s;"
         params = ( user.email, user.password)
         cursor.execute(sql, params)
         records = cursor.fetchone()
         if records:
+            
             access_token = create_access_token(
                 data={
                     
                     "id": records[0],
                     "email": records[1],
-                    "password": records[2],
-                    
+                    "name": records[2],    
                 }
             )
             return {"token": access_token}
@@ -334,6 +343,123 @@ async def signin(user:Member):
             cursor.close()
         if conn:
             conn.close()
+
+
+
+#booking
+#未結帳訂單
+
+@app.get("/api/booking")
+async def get_booking(user: str = Depends(verify_token)):
+    
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        sql = """
+            SELECT b.user_id, b.attraction_id, b.date, b.time, b.price, a.name, a.address, a.images
+            FROM bookings b
+            JOIN attractions a ON b.attraction_id = a.id
+            WHERE b.user_id = %s;
+        """
+        params=(user["id"],)
+        cursor.execute(sql, params)
+        record = cursor.fetchall()
+        if record:
+            booking = {
+                    "data": {
+                        "attraction": {
+                            "id": record[0][1],
+                            "name": record[0][5],
+                            "address": record[0][6],
+                            "image": record[0][7].split(",")[0]
+                        },
+                        "date": record[0][2].isoformat(),
+                        "time": record[0][3],
+                        "price": record[0][4]
+                    }
+                }
+            
+            return  JSONResponse(content=booking) 
+        
+    except Exception as e:
+        raise Exception(str(e)) 
+    
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+   
+
+
+
+#建立訂單
+@app.post("/api/booking")
+async def create_booking(booking: Booking,user: str = Depends(verify_token)):
+    if user:
+        # 檢查booking的所有屬性是否都有值
+        if not all([booking.attractionId, booking.date, booking.time, booking.price]):
+            return JSONResponse(content={"error":True,"message": "資料未完整"})
+            
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            check_sql="SELECT id from bookings WHERE user_id=%s;"
+            sql = "INSERT INTO bookings (user_id, attraction_id, date,time,price) VALUES (%s, %s, %s, %s, %s)"
+            params = (user['id'], booking.attractionId, booking.date,booking.time, booking.price)
+            check_params=(user['id'],)
+
+
+            cursor.execute(check_sql, check_params)
+            record = cursor.fetchall()
+            if record:
+                sql = """
+                    UPDATE bookings
+                    SET attraction_id = %s, date = %s, time = %s, price = %s
+                    WHERE user_id = %s
+                    """
+                cursor.execute(sql, (booking.attractionId, booking.date, booking.time, booking.price, user['id']))
+                conn.commit()
+            else:
+                cursor.execute(sql, params)
+                conn.commit()
+        
+            return JSONResponse(content={"ok":True})
+        
+        except Exception as e:
+            raise Exception(str(e)) 
+        
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        
+        return JSONResponse(content={"error":True,"message": "未授權"})
+        
+
+
+
+#刪除訂單
+@app.delete("/api/booking")  
+async def delect_booking(user: str = Depends(verify_token)):
+    
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        sql="delete from bookings where user_id = %s;"
+        params=(user["id"],)
+        cursor.execute(sql, params)
+        conn.commit()
+        return{ "ok": True}
+    
+    except Exception as e:
+        raise Exception(str(e)) 
+    
+    finally:
+            cursor.close()
+            conn.close()
+    
+
 
 
 
