@@ -470,6 +470,7 @@ async def delect_booking(user: str = Depends(verify_token)):
 @app.post("/api/orders")
 async def get_Prime(request: Request,user: str = Depends(verify_token)):
     data = await request.json() 
+   
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -483,8 +484,8 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
         if not record:
             #沒有就新增訂單
             orderNumber = generate_order_id()
-            sql = "INSERT INTO orders (order_number ,user_id, attraction_id,total) VALUES (%s, %s, %s, %s)"
-            params = (orderNumber,user['id'], data["order"]["trip"]["attraction"]["id"], int(data["order"]["price"]))
+            sql = "INSERT INTO orders (order_number ,user_id, attraction_id,total,date,time) VALUES (%s, %s, %s, %s, %s, %s)"
+            params = (orderNumber,user['id'], data["order"]["trip"]["attraction"]["id"], int(data["order"]["price"]),data["order"]["trip"]["date"],data["order"]["trip"]["time"])
             cursor.execute(sql, params) 
             conn.commit()
         else:
@@ -519,7 +520,7 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
         async with httpx.AsyncClient() as client:
             response = await client.post(url, json=post_data, headers=headers)
             result = response.json()
-            print(result)
+            
         
         pay_sql = "INSERT INTO payment (user_id, order_number, message) VALUES (%s, %s, %s)"
         pay_params = (user['id'], orderNumber,result["msg"] )
@@ -532,10 +533,9 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
         #繳款成功更新表單
         if result["msg"]=='Success':
             cursor.execute(f"UPDATE orders SET status = 'PAID' WHERE order_number='{orderNumber}'")
-            conn.commit()
             cursor.execute(dele_sql, dele_params)
             conn.commit()
-            
+        
         
         
         #回覆前端格式

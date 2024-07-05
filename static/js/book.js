@@ -63,6 +63,7 @@ fetch("/api/booking", {
         price.textContent=data["data"]["price"]
         address.textContent=data["data"]["attraction"]["address"]
         total.textContent=`總價：新台幣 ${data["data"]["price"]} 元`
+        
         localStorage.setItem('bookingData', JSON.stringify(data));
     } 
 })
@@ -153,14 +154,14 @@ function deleteBookingAPI(userID,token){
         return response.json();
     }).then(data=>{
         console.log(data);
-        console.log(userID);
+        
     })
     
 }
 
 
 //傳送刷卡資料資料
-let bookingData = JSON.parse(localStorage.getItem('bookingData'));
+
 
 let  orderNumber = null
 
@@ -251,9 +252,10 @@ TPDirect.card.onUpdate(function (update) {
     }
 })
 
-localStorage.removeItem('orderNumber');
+
 document.getElementById('submit').addEventListener('click', function(event) {
     event.preventDefault();
+    let bookingData = JSON.parse(localStorage.getItem('bookingData'));
     let phone = document.querySelector("#phone").value
     let name =document.querySelector("#bookingName").value
     let email =document.querySelector("#bookingEmail").value
@@ -302,10 +304,10 @@ document.getElementById('submit').addEventListener('click', function(event) {
                 });
 
                 const responseData = await response.json();
-                console.log(responseData["data"]["number"]);
+               
                 
                 if(responseData["data"]["payment"]["status"] == 0){
-                    console.log(responseData["data"]["number"]);
+                   
                     orderNumber = responseData["data"]["number"]
                     window.location.href = `/thankyou?number=${orderNumber}`;
                 }else{
