@@ -307,7 +307,7 @@ document.getElementById('submit').addEventListener('click', function(event) {
                
                 
                 if(responseData["data"]["payment"]["status"] == 0){
-                   
+                  
                     orderNumber = responseData["data"]["number"]
                     window.location.href = `/thankyou?number=${orderNumber}`;
                 }else{
