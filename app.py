@@ -2,13 +2,15 @@ from fastapi import *
 from fastapi.responses import FileResponse
 import  uvicorn
 from pydantic import BaseModel
-import mysql.connector
+
 from typing import Optional
 from fastapi.responses import JSONResponse
 from mysql.connector import pooling
 import config
 from fastapi.staticfiles import StaticFiles
-
+import httpx
+import datetime
+import random
 import jwt
 from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError
@@ -36,7 +38,14 @@ def get_connection():
 
 
 
-
+#當前時間+隨機數
+def generate_order_id():
+    now = datetime.datetime.now()
+    date_str = now.strftime("%Y%m%d")  
+    time_str = now.strftime("%H%M%S")  
+    random_number = random.randint(1000, 9999)
+    order_id = f"{date_str}{time_str}{random_number}"
+    return order_id
 
 
 
@@ -57,8 +66,6 @@ class Response(BaseModel):
     data: list[Attraction]
     nextPage:Optional[int]
 
-class AttractionId(BaseModel):
-    data :Attraction
 
 class AttractionIdException(Exception):
     def __init__(self, message: str):
@@ -160,7 +167,7 @@ async def get_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = N
             cursor.execute(sql, params)
 
         records = cursor.fetchall()
-
+        
         # 處理查詢結果
         data = []
         for record in records[:12]:
@@ -174,7 +181,7 @@ async def get_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = N
                 "mrt": record[6],
                 "lat": record[7],
                 "lng": record[8],
-                "images": record[9].split(",")  # 假設圖片用逗號分隔存儲
+                "images": record[9].split(",")  
             }
             data.append(Attraction(**attraction_dict))
         
@@ -197,7 +204,7 @@ async def get_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = N
             conn.close()
 
 #景點id api
-@app.get("/api/attraction/{attractionId}",response_model=AttractionId )
+@app.get("/api/attraction/{attractionId}" )
 async def attractionId(attractionId: int ):
     try:
         conn = get_connection()
@@ -207,24 +214,23 @@ async def attractionId(attractionId: int ):
         
         if not records:
             raise AttractionIdException("景點編號不正確")
-
-        attraction_dict = {
-                "id": records[0],
-                "name": records[1],
-                "category": records[2],
-                "description": records[3],
-                "address": records[4],
-                "transport": records[5],
-                "mrt": records[6],
-                "lat": records[7],
-                "lng": records[8],
-                "images":records[9].split(",")   
-            }
-        data = Attraction(**attraction_dict)
-        response_data = AttractionId(data=data)
-        return JSONResponse(content=response_data.model_dump())   
+        
+        data = Attraction(
+            id=records[0],
+            name=records[1],
+            category=records[2],
+            description=records[3],
+            address=records[4],
+            transport=records[5],
+            mrt=records[6],
+            lat=records[7],
+            lng=records[8],
+            images=records[9].split(",")  
+        )
+        
+        return {"data":data} 
     except AttractionIdException as e:
-        raise e  # 確保自訂的 AttractionIdException 被捕捉並處理
+        raise e 
     except Exception as e:
         raise Exception(str(e))
     
@@ -304,8 +310,6 @@ async def check_user(user: str = Depends(verify_token)):
     
     
     
-
-
 
 
 #登入會員
@@ -459,6 +463,107 @@ async def delect_booking(user: str = Depends(verify_token)):
             cursor.close()
             conn.close()
     
+
+
+
+#接收前端TapPay Prime
+@app.post("/api/orders")
+async def get_Prime(request: Request,user: str = Depends(verify_token)):
+    data = await request.json() 
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        check_sql="SELECT orders.order_number FROM orders WHERE user_id=%s AND attraction_id=%s AND status='UNPAID';"
+        check_params=(user['id'],data["order"]["trip"]["attraction"]["id"])
+
+        #確認是否有訂單編號
+        cursor.execute(check_sql, check_params)
+        record = cursor.fetchall()
+        
+        if not record:
+            #沒有就新增訂單
+            orderNumber = generate_order_id()
+            sql = "INSERT INTO orders (order_number ,user_id, attraction_id,total) VALUES (%s, %s, %s, %s)"
+            params = (orderNumber,user['id'], data["order"]["trip"]["attraction"]["id"], int(data["order"]["price"]))
+            cursor.execute(sql, params) 
+            conn.commit()
+        else:
+          
+            orderNumber=record[0][0]
+        
+            
+            
+    #發送給TapPay的資料
+        post_data = {
+            "prime": data["prime"],
+            "partner_key": "partner_jCN5Y386G0N04CFn8lnVxJWCqlYJVaeWH1zWXNJgxao6zsghDHIgWreu",
+            "merchant_id": 'tppf_annie0121_GP_POS_1',
+            "amount":int(data["order"]["price"]) ,
+            "currency":"TWD",
+            "details": data["order"]["trip"]["attraction"]["name"],
+            "cardholder": {
+                "phone_number": data["order"]["contact"]["phone"],
+                "name": data["order"]["contact"]["name"],
+                "email": data["order"]["contact"]["email"]
+            },
+            "remember": False
+        }
+
+        url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
+        headers = {
+            "Content-Type": "application/json",
+            "x-api-key": "partner_jCN5Y386G0N04CFn8lnVxJWCqlYJVaeWH1zWXNJgxao6zsghDHIgWreu"
+        }
+        # response = requests.post(url, json=post_data, headers=headers)
+        
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, json=post_data, headers=headers)
+            result = response.json()
+            print(result)
+        
+        pay_sql = "INSERT INTO payment (user_id, order_number, message) VALUES (%s, %s, %s)"
+        pay_params = (user['id'], orderNumber,result["msg"] )
+        dele_sql ='delete from bookings where user_id = %s and attraction_id=%s;'
+        dele_params=(user['id'],data["order"]["trip"]["attraction"]["id"])
+        cursor.execute(pay_sql, pay_params)
+        conn.commit()
+        
+
+        #繳款成功更新表單
+        if result["msg"]=='Success':
+            cursor.execute(f"UPDATE orders SET status = 'PAID' WHERE order_number='{orderNumber}'")
+            conn.commit()
+            cursor.execute(dele_sql, dele_params)
+            conn.commit()
+            
+        
+        
+        #回覆前端格式
+        response_data={
+                "number":orderNumber,
+                "payment":{
+                    "status":result["status"],
+                    "message":result["msg"]
+                }
+            }
+
+        print(response_data)
+        return JSONResponse(content={"data": response_data})
+    
+    except Exception as e:
+        conn.rollback()
+        raise Exception(str(e)) 
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+
+    
+
+
+
 
 
 

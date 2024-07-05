@@ -101,36 +101,44 @@
         </div>
         <div style="margin-top: 15px;">
             <span class="booking_contact_name">手機號碼：</span>
-            <input class="booking_contact_name_input">
+            <input class="booking_contact_name_input" id="phone">
         </div>
         
         <div class="booking_contact_notice"  >請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
     </div>
     <!--付款資料-->
     <hr class="second_hr">
-    <div class="booking_payment">
-        <div class="booking_payment_title">信用卡付款資訊</div>
-        <div style="margin-top: 20px;">
-            <span class="booking_payment_name">卡片號碼：</span>
-            <input class="booking_payment_name_input" placeholder="**** **** **** ****">
+    
+    <form>
+        <div class="booking_payment">
+            <div class="booking_payment_title">信用卡付款資訊</div>
+
+            <div style="margin-top: 20px;display: flex;align-items: center;" class="form-group card-number-group ">
+                <label for="card-number"  class="booking_payment_name">卡片號碼：</label>
+                <div class="booking_payment_name_input card-number" ></div>
+            </div>
+            <div style="margin-top: 15px;display: flex;align-items: center;" class="form-group expiration-date-group">
+                <label for="expiration-date"  class="booking_payment_name">過期時間：</label>
+                <div class="booking_payment_name_input expiration-date" id="tappay-expiration-date" ></div>
+            </div>
+            <div style="margin-top: 15px;display: flex;align-items: center;" class="form-group ccv-group"     >
+                <label for="ccv"  class="booking_payment_name">驗證密碼：</label>
+                <div class="booking_payment_name_input ccv" ></div>
+            </div>
         </div>
-        <div style="margin-top: 15px;">
-            <span class="booking_payment_name">過期時間：</span>
-            <input class="booking_payment_name_input" placeholder="MM / YY">
-        </div>
-        <div style="margin-top: 15px;">
-            <span class="booking_payment_name">驗證密碼：</span>
-            <input class="booking_payment_name_input" placeholder="CVV">
-        </div>
-    </div>
+    </form>   
+
+
     <hr class="second_hr">
     <div  class="booking_total">
         <div class="booking_total_price"></div>
-        <button class="booking_total_button">確認訂購並付款</button>
+        <button class="booking_total_button" id="submit" type="submit">確認訂購並付款</button>
     </div>
 </div>
 <div class="footer">COPYRIGHT © 2021 台北一日遊</div>
 <script  type="module" src="/static/js/book.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
   
 </body>
 </html>

@@ -1,0 +1,266 @@
+body{
+    margin: 0 ;
+    width: 100%;  
+}
+.header{
+    height: 54px;
+    width: 100%;
+}
+.header_content{
+    display: flex;
+    margin: 0 auto;
+    height: 34px;
+    padding-top: 10px;
+    width: 1200px;
+    justify-content: space-between;
+    
+    
+}
+
+.header_name{
+    color: rgba(68, 136, 153, 1);
+    font-weight:  700;
+    font-size: 30px;
+    height: 34px;
+    cursor: pointer;
+}
+
+
+.heade_frame{
+    right: 175px;
+    width: 175px;
+    height: 34px;
+    display: flex;
+    
+    align-content:center;
+    /*
+    border: 1px solid rgba(0, 0, 0, 1);*/
+
+    
+}
+
+.heade_frame_book{
+    width: 84px;
+}
+
+.heade_frame_log{
+    width: 91px;
+}
+.first_hr{
+    width: 100%; 
+    border: 1px solid rgba(232, 232, 232, 1) ;
+    margin-top: 0;
+    box-sizing: border-box;
+}
+.login_dialog_background{
+    position: fixed;
+    top: 0;
+    left: 0; 
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明的黑色背景 */
+    z-index: 1000; 
+    display: none;
+}
+.login_dialog{
+    width: 340px;
+    min-height: 275px;
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0px 4px 60px rgba(170, 170, 170, 0.1);
+    border-radius: 6px;
+    margin: 80px auto;
+    
+    
+    
+}
+.dialog_bar{
+    width: 340px;
+    height: 10px;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.dialog_main{
+    padding: 15px;
+    position: relative;
+    
+}
+.dialog_main_title{
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: rgba(102, 102, 102, 1);
+}
+.dialog_main_email{
+    width: 310px;
+    height: 47px;
+    box-sizing: border-box;
+    margin-top: 15px;
+    border-radius: 5px;
+    border: 1px solid rgba(204, 204, 204, 1);
+    padding: 15px;
+}
+.dialog_main_email::placeholder{
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(117, 117, 117, 1);
+
+}
+.dialog_main_password{
+    width: 310px;
+    height: 47px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(204, 204, 204, 1);
+    padding: 15px;
+}
+.dialog_main_password::placeholder{
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(117, 117, 117, 1);
+}
+.dialog_main_button{
+    background-color: rgba(68, 136, 153, 1);
+    width: 310px;
+    height: 47px;
+    margin-top: 10px;
+    font-size: 19px;
+    font-weight: 400;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.dialog_main_register{
+    margin-top: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(102, 102, 102, 1);
+}
+.dialog_main_close{
+    width: 16px;
+    height: 16px;
+    top: 22px;
+    right: 22px;
+    position: absolute;
+    cursor: pointer;
+    
+}
+
+.signup_button{
+    cursor: pointer;
+}
+/*註冊畫面*/
+.signup_dialog_background{
+    position: fixed;
+    top: 0;
+    left: 0; 
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明的黑色背景 */
+    z-index: 1000; 
+    display: none;
+}
+.signup_dialog{
+    width: 340px;
+    min-height: 332px;
+    background-color: aqua;
+    border-radius: 6px;
+    margin: 80px auto;
+    
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0px 4px 60px rgba(170, 170, 170, 0.1);
+}
+.dialog_main_name{
+    width: 310px;
+    height: 47px;
+    box-sizing: border-box;
+    margin-top: 15px;
+    border-radius: 5px;
+    border: 1px solid rgba(204, 204, 204, 1);
+    padding: 15px;
+}
+.dialog_main_name::placeholder{
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(117, 117, 117, 1);
+}
+.signup_dialog_main_email{
+    width: 310px;
+    height: 47px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(204, 204, 204, 1);
+    padding: 15px;
+}
+.signup_dialog_main_email::placeholder{
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(117, 117, 117, 1);
+}
+
+.fail_signup{
+    width: 310px;
+    text-align: center;
+    color: red;
+    margin-top: 10px;
+    
+}
+.login_button{
+    cursor: pointer;
+}
+.headline{
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 46px;
+    font-size: 19px;
+    font-weight: 700;
+    color:rgba(102, 102, 102, 1);
+}
+.footer{
+    background-color: rgba(117, 117, 117, 1);
+    font-size: 16px;
+    font-weight: 700;
+    height:75vh;
+    width: 100%;
+    color: rgba(255, 255, 255, 1);
+    text-align: center; 
+    line-height: 104px;
+}
+.thankyou{
+    margin:  40px auto; 
+    height: 200px;
+    width: 550px;
+    text-align: center ;
+}
+@media(max-width:1200px){
+    .header_content {
+        width: 95%;
+    }
+    .second_hr{
+        width: 95%;
+    }
+    
+    
+    .headline{
+        width: 90%
+    }
+    
+}
+@media(max-width:700px){
+    
+    .headline {
+        
+        margin-left: 10px;
+    }
+    
+    .second_hr{
+        margin-top: 30px;
+    }
+    .thankyou{
+        width: 95%;
+    }
+}

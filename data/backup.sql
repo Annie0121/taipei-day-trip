@@ -66,7 +66,7 @@ CREATE TABLE `bookings` (
   KEY `attraction_id` (`attraction_id`),
   CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attractions` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,8 +75,72 @@ CREATE TABLE `bookings` (
 
 LOCK TABLES `bookings` WRITE;
 /*!40000 ALTER TABLE `bookings` DISABLE KEYS */;
-INSERT INTO `bookings` VALUES (14,1,20,'2024-06-13','afternoon',2500);
+INSERT INTO `bookings` VALUES (4,2,7,'2024-07-15','morning',2000);
 /*!40000 ALTER TABLE `bookings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `order_number` varchar(50) NOT NULL,
+  `user_id` bigint NOT NULL,
+  `attraction_id` bigint DEFAULT NULL,
+  `total` int NOT NULL,
+  `status` enum('UNPAID','PAID') DEFAULT 'UNPAID',
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`order_number`),
+  KEY `user_id` (`user_id`),
+  KEY `attraction_id` (`attraction_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`attraction_id`) REFERENCES `attractions` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES ('202407041802204034',2,20,2500,'PAID','2024-07-04 10:02:20','2024-07-04 10:03:36'),('202407041807283177',2,20,2500,'PAID','2024-07-04 10:07:28','2024-07-04 10:07:58'),('202407041808378548',2,20,2500,'PAID','2024-07-04 10:08:37','2024-07-04 10:08:38'),('202407041808512786',2,20,2500,'PAID','2024-07-04 10:08:51','2024-07-04 10:08:52'),('202407041809445992',2,20,2500,'PAID','2024-07-04 10:09:44','2024-07-04 10:09:45'),('202407041811208428',2,20,2500,'PAID','2024-07-04 10:11:20','2024-07-04 10:11:21'),('202407041812064348',2,20,2500,'PAID','2024-07-04 10:12:06','2024-07-04 10:12:07'),('202407041814256850',2,20,2500,'PAID','2024-07-04 10:14:25','2024-07-04 10:14:27'),('202407050007168619',2,20,2500,'PAID','2024-07-04 16:07:16','2024-07-04 16:07:17'),('202407050012368818',2,8,2000,'PAID','2024-07-04 16:12:36','2024-07-04 16:13:47'),('202407050015108083',2,7,2000,'PAID','2024-07-04 16:15:10','2024-07-04 16:15:12');
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `order_number` varchar(50) NOT NULL,
+  `message` varchar(50) DEFAULT NULL,
+  `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `order_number` (`order_number`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`order_number`) REFERENCES `orders` (`order_number`),
+  CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment`
+--
+
+LOCK TABLES `payment` WRITE;
+/*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (1,2,'202407041802204034','Invalid arguments : partner_key','2024-07-04 10:02:20'),(2,2,'202407041802204034','Invalid arguments : partner_key','2024-07-04 10:02:43'),(3,2,'202407041802204034','Success','2024-07-04 10:03:36'),(4,2,'202407041807283177','Invalid arguments : partner_key','2024-07-04 10:07:28'),(5,2,'202407041807283177','Success','2024-07-04 10:07:58'),(6,2,'202407041808378548','Success','2024-07-04 10:08:38'),(7,2,'202407041808512786','Success','2024-07-04 10:08:52'),(8,2,'202407041809445992','Success','2024-07-04 10:09:45'),(9,2,'202407041811208428','Success','2024-07-04 10:11:21'),(10,2,'202407041812064348','Success','2024-07-04 10:12:07'),(11,2,'202407041814256850','Success','2024-07-04 10:14:27'),(12,2,'202407050007168619','Success','2024-07-04 16:07:17'),(13,2,'202407050012368818','Success','2024-07-04 16:12:39'),(14,2,'202407050012368818','Success','2024-07-04 16:13:47'),(15,2,'202407050015108083','Success','2024-07-04 16:15:12');
+/*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -114,4 +178,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-27 17:37:52
+-- Dump completed on 2024-07-05 11:51:51

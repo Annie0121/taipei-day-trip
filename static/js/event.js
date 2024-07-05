@@ -141,7 +141,7 @@ export const fetchAuth=()=>{
 
 export const getResponse=()=>{
     return fetchAuth().then(response=>{
-        console.log(response);
+        
         if(response.ok){
             login.style.display = "none";
             signout.style.display = "block";
