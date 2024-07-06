@@ -4,8 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thank You</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/thankyou.css">
 </head>
 <body>
-  
+  <div class="header" >
+    <div class="header_content">
+        <div class="header_name">台北一日遊</div>
+        <div class="heade_frame">
+            <div class="heade_frame_book">
+                <div id="reservation" style="padding: 10px;font-size: 16px;cursor: pointer">預定行程</div>
+            </div>
+            <div class="heade_frame_log">
+                <div id="login" style="padding: 10px;font-size: 16px;cursor: pointer; display:none;">登入/註冊</div>
+                <div id="signout" style="padding: 10px;font-size: 16px;cursor: pointer; display:none;">登出系統</div>
+            </div>
+         </div>
+    </div> 
+</div>
+<!--登入畫面-->
+<div class="login_dialog_background"  >
+  <div class="login_dialog" >
+      <div class="dialog_bar"></div>
+      <div class="dialog_main">
+          <div class="dialog_main_title">登入會員帳號</div>
+          <img id="CloseLogin" class="dialog_main_close"  src="/static/img/close.png">
+          <input class="dialog_main_email" placeholder="輸入電子郵件" id="signinEmail" >
+          <input class="dialog_main_password" placeholder="輸入密碼" id="signinPassword"type="password">
+          <button class="dialog_main_button" id="singin" >登入帳號</button>
+          <div class="dialog_main_register" id="signup">還沒有帳戶？<span class="signup_button">點此註冊</span></div>
+      </div>
+  </div>
+</div>
+<!--註冊畫面-->
+<div class="signup_dialog_background"  >
+<div class="signup_dialog">
+  <div class="dialog_bar"></div>
+  <div class="dialog_main">
+      <div class="dialog_main_title">註冊會員帳號</div>
+      <img id="CloseSignup" class="dialog_main_close"  src="/static/img/close.png">
+      <input class="dialog_main_name" placeholder="輸入姓名" id="signupUname">
+      <input class="signup_dialog_main_email" placeholder="輸入電子郵件" id="signupEmail">
+      <input class="dialog_main_password" placeholder="輸入密碼" id="signupPassword" type="password">
+      <button class="dialog_main_button" id="signupNew">註冊新帳號</button>
+      <div class="dialog_main_register" id="login">已經有帳戶了？<span class="login_button">點此登入</span></div>
+  </div>
+</div>
+</div>
+<hr class="first_hr"> 
+<div class="thankyou" >
+  <div id="result" style="font-size: 20px;font-weight: 700;color: rgba(102, 102, 102, 1);">行程預定成功</div>
+  <div style="font-size: 20px;font-weight: 700;color: rgba(102, 102, 102, 1);" >您的訂單編號如下</div>
+  <div id="number" style="margin-top: 15px;font-size: 20px;font-weight: 500;color:rgba(102, 102, 102, 1) ;"></div>
+  <div style="margin-top: 15px;font-size: 20px;font-weight: 500;color:rgba(102, 102, 102, 1)">請記住編號，或到會員中心查詢歷史交易</div>
+</div>
+<div class="footer">COPYRIGHT © 2021 台北一日遊</div>
+<script  type="module" src="/static/js/thankyou.js"></script>
+
 </body>
 </html>
