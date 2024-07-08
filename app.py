@@ -6,7 +6,6 @@ from pydantic import BaseModel
 from typing import Optional
 from fastapi.responses import JSONResponse
 from mysql.connector import pooling
-import config
 from fastapi.staticfiles import StaticFiles
 import httpx
 import datetime
@@ -15,8 +14,16 @@ import jwt
 from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError
 
+from dotenv import load_dotenv  #取.env中設定的密碼，變成環境變數
+import os #讀取環境變數
 
-bookings_db = {}
+
+
+load_dotenv()
+#獲取環境變數的值
+db_user = os.getenv("db_user")
+db_password = os.getenv("db_password")
+partner_key = os.getenv("partner_key")
 
 
 app=FastAPI()
@@ -24,13 +31,12 @@ app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 dbconfig = {
     "database": 'Taipei_Attraction',
-    "user": "root",
-    "password": config.password,
+    "user": db_user,
+    "password": db_password,
     "host": "localhost"
 }
 cnxpool = pooling.MySQLConnectionPool(
-    pool_name="mypool",
-    pool_size=20,  
+    pool_name="mypool",  
     **dbconfig
 )
 def get_connection():
@@ -497,7 +503,7 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
     #發送給TapPay的資料
         post_data = {
             "prime": data["prime"],
-            "partner_key": "partner_jCN5Y386G0N04CFn8lnVxJWCqlYJVaeWH1zWXNJgxao6zsghDHIgWreu",
+            "partner_key": partner_key,
             "merchant_id": 'tppf_annie0121_GP_POS_1',
             "amount":int(data["order"]["price"]) ,
             "currency":"TWD",
@@ -547,7 +553,7 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
                 }
             }
 
-        print(response_data)
+       
         return JSONResponse(content={"data": response_data})
     
     except Exception as e:
