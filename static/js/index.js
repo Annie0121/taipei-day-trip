@@ -4,6 +4,7 @@ let listRight = document.querySelector("#right_img");
 let listItem = document.querySelector(".list_item");
 let currentKeyword = '';
 
+
 // 向右滑動
 listRight.addEventListener("click", function() {
     let screenWidth = window.innerWidth;

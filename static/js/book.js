@@ -8,7 +8,7 @@ checkSignup();
 signinCheck();
 
 bookTrip();
-
+let loading = document.querySelector(".loading_background");
 //回到首頁
 let back = document.querySelector(".header_name");
 back.addEventListener("click",function(){
@@ -38,7 +38,7 @@ if(!token){
 
 
 
-
+loading.style.display = "block"
 
 fetch("/api/booking", {
     method: 'GET',
@@ -66,6 +66,9 @@ fetch("/api/booking", {
         
         localStorage.setItem('bookingData', JSON.stringify(data));
     } 
+})
+.finally(() => {
+    loading.style.display = "none";
 })
 
 
@@ -293,6 +296,8 @@ document.getElementById('submit').addEventListener('click', function(event) {
             
 
             try {
+                
+                loading.style.display = "block"
                 const response = await fetch('/api/orders', {
                     method: 'POST',
                     headers: {
@@ -318,6 +323,8 @@ document.getElementById('submit').addEventListener('click', function(event) {
                 
             } catch (error) {
                 console.error('Error:', error);
+            }finally{
+                loading.style.display = "none"
             }
         });
     }
