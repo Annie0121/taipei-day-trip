@@ -87,9 +87,7 @@ fetchData();
 
 function fetchData(page=0,keyword=currentKeyword){
     if (isLoading || page == null) {
-        if (page == null) {
-            document.querySelector(".footer").style.display = "block";
-        }
+        
         return;
     }
 
@@ -100,9 +98,15 @@ function fetchData(page=0,keyword=currentKeyword){
     .then(response => response.json())
     .then(data => {
         nextPage = data["nextPage"];
+        if (nextPage == null) {
+            document.querySelector(".footer").style.display = "block";
+        }else{
+            document.querySelector(".footer").style.display = "none";
+        }
+        
         renderAttractions(data["data"]);
         isLoading = false;
-        document.querySelector(".footer").style.display = "none";
+        
         
     
 });
