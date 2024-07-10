@@ -37,8 +37,10 @@ fetch(`/api/attraction/${attractionId}`)
   add.innerHTML=address;
   transport.innerHTML =trans;
   img.src =imgs[0];
+  img.classList.add("show");
   
   //預下載圖片 創建img物件，將物件src屬性設定為url 存在瀏覽器的緩存中
+  
   imgs.forEach(url => {
     const img = new Image();
     img.src = url;
@@ -58,17 +60,26 @@ fetch(`/api/attraction/${attractionId}`)
 
   let i =0;
   right.addEventListener("click",function(){
+      img.classList.remove("show"); 
       i++;
       i=i>=imgs.length ?0:i
-      img.src =imgs[i];
+      setTimeout(()=>{
+        img.src =imgs[i];
+        img.classList.add("show");
+      },500)
+      
       document.querySelector("ul .active").classList.remove("active");
       document.querySelector(`ul li:nth-child(${i+1}) `).classList.add("active");
   })
   
   left.addEventListener("click",function(){
+    img.classList.remove("show");
     i--;
     i= i<0 ? imgs.length-1 :i
-    img.src =imgs[i];
+    setTimeout(()=>{
+      img.src =imgs[i];
+      img.classList.add("show");
+    },500)
     document.querySelector("ul .active").classList.remove("active");
     document.querySelector(`ul li:nth-child(${i+1}) `).classList.add("active");
   })
