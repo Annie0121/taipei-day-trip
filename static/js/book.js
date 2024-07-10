@@ -255,6 +255,8 @@ TPDirect.card.onUpdate(function (update) {
     }
 })
 
+//檢查輸入資料
+let  phoneRegex = /^[0-9]{10}$/;
 
 document.getElementById('submit').addEventListener('click', function(event) {
     event.preventDefault();
@@ -263,10 +265,10 @@ document.getElementById('submit').addEventListener('click', function(event) {
     let name =document.querySelector("#bookingName").value
     let email =document.querySelector("#bookingEmail").value
     
-    if(!phone){
+    if(!phone || !name||!email){
         alert("請輸入完整資料")
-        
-
+    }else if(!phoneRegex.test(phone)){
+        alert("請輸正確手機號碼")
     }else{
         TPDirect.card.getPrime(async function(result) {
             if (result.status !== 0) {
@@ -309,7 +311,7 @@ document.getElementById('submit').addEventListener('click', function(event) {
                 });
 
                 const responseData = await response.json();
-               
+                
                 
                 if(responseData["data"]["payment"]["status"] == 0){
                   

@@ -2,7 +2,7 @@ from fastapi import *
 from fastapi.responses import FileResponse
 import  uvicorn
 from pydantic import BaseModel
-
+import re
 from typing import Optional
 from fastapi.responses import JSONResponse
 from mysql.connector import pooling
@@ -280,8 +280,11 @@ async def get_mrts():
 
 @app.post("/api/user")
 async def signup(user: User):
+    email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not user.name or not user.email or not user.password:
         return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
+    elif not re.match(email_regex, user.email):
+        return JSONResponse(content={"error": True, "message": "請輸入正確的電子信箱"})
     try:
         
         conn = get_connection()
@@ -321,8 +324,11 @@ async def check_user(user: str = Depends(verify_token)):
 #登入會員
 @app.put("/api/user/auth")
 async def signin(user:Member):
-    try:
+    
+    if not user.email or not user.password:
         
+        return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
+    try:
         conn = get_connection()
         cursor = conn.cursor()
         sql = "SELECT id,email,name from users WHERE  email = %s and password = %s;"
@@ -330,10 +336,8 @@ async def signin(user:Member):
         cursor.execute(sql, params)
         records = cursor.fetchone()
         if records:
-            
             access_token = create_access_token(
                 data={
-                    
                     "id": records[0],
                     "email": records[1],
                     "name": records[2],    
@@ -476,8 +480,12 @@ async def delect_booking(user: str = Depends(verify_token)):
 @app.post("/api/orders")
 async def get_Prime(request: Request,user: str = Depends(verify_token)):
     data = await request.json() 
-   
-    try:
+    name = data["order"]["contact"]["name"]
+    email=data["order"]["contact"]["email"]
+    phone=data["order"]["contact"]["phone"]
+    if not name or not email or not phone:
+        return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
+    try:   
         conn = get_connection()
         cursor = conn.cursor()
         check_sql="SELECT orders.order_number FROM orders WHERE user_id=%s AND attraction_id=%s AND status='UNPAID';"
@@ -509,9 +517,9 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
             "currency":"TWD",
             "details": data["order"]["trip"]["attraction"]["name"],
             "cardholder": {
-                "phone_number": data["order"]["contact"]["phone"],
-                "name": data["order"]["contact"]["name"],
-                "email": data["order"]["contact"]["email"]
+                "phone_number": phone,
+                "name": name,
+                "email": email
             },
             "remember": False
         }
