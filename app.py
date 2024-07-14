@@ -326,7 +326,7 @@ async def check_user(user: str = Depends(verify_token)):
 async def signin(user:Member):
     
     if not user.email or not user.password:
-        
+
         return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
     try:
         conn = get_connection()
@@ -483,7 +483,8 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
     name = data["order"]["contact"]["name"]
     email=data["order"]["contact"]["email"]
     phone=data["order"]["contact"]["phone"]
-    if not name or not email or not phone:
+   
+    if not name or not email or not phone :
         return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
     try:   
         conn = get_connection()

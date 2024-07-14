@@ -253,13 +253,17 @@ TPDirect.card.onUpdate(function (update) {
     } else {
         setNumberFormGroupToNormal('.ccv-group')
     }
+    
 })
+
+
 
 //檢查輸入資料
 let  phoneRegex = /^[0-9]{10}$/;
 
 document.getElementById('submit').addEventListener('click', function(event) {
     event.preventDefault();
+    
     let bookingData = JSON.parse(localStorage.getItem('bookingData'));
     let phone = document.querySelector("#phone").value
     let name =document.querySelector("#bookingName").value
