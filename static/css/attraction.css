@@ -237,13 +237,18 @@ body{
     position: relative;
     
 }
+/*淡出淡入效果*/
 .attraction_img{
     object-fit: cover;
     width: 100%;
     height: 100%;
-    
-    
+    opacity: 0;
+    transition: opacity 0.5s; 
 }
+.attraction_img.show {
+    opacity: 1;
+}
+
 .attraction_img_button{
     width: 100%;
     display: flex;

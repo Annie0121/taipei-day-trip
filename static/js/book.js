@@ -8,7 +8,7 @@ checkSignup();
 signinCheck();
 
 bookTrip();
-
+let loading = document.querySelector(".loading_background");
 //回到首頁
 let back = document.querySelector(".header_name");
 back.addEventListener("click",function(){
@@ -38,7 +38,7 @@ if(!token){
 
 
 
-
+loading.style.display = "block"
 
 fetch("/api/booking", {
     method: 'GET',
@@ -66,6 +66,9 @@ fetch("/api/booking", {
         
         localStorage.setItem('bookingData', JSON.stringify(data));
     } 
+})
+.finally(() => {
+    loading.style.display = "none";
 })
 
 
@@ -250,20 +253,26 @@ TPDirect.card.onUpdate(function (update) {
     } else {
         setNumberFormGroupToNormal('.ccv-group')
     }
+    
 })
 
 
+
+//檢查輸入資料
+let  phoneRegex = /^[0-9]{10}$/;
+
 document.getElementById('submit').addEventListener('click', function(event) {
     event.preventDefault();
+    
     let bookingData = JSON.parse(localStorage.getItem('bookingData'));
     let phone = document.querySelector("#phone").value
     let name =document.querySelector("#bookingName").value
     let email =document.querySelector("#bookingEmail").value
     
-    if(!phone){
+    if(!phone || !name||!email){
         alert("請輸入完整資料")
-        
-
+    }else if(!phoneRegex.test(phone)){
+        alert("請輸正確手機號碼")
     }else{
         TPDirect.card.getPrime(async function(result) {
             if (result.status !== 0) {
@@ -293,6 +302,8 @@ document.getElementById('submit').addEventListener('click', function(event) {
             
 
             try {
+                
+                loading.style.display = "block"
                 const response = await fetch('/api/orders', {
                     method: 'POST',
                     headers: {
@@ -304,7 +315,7 @@ document.getElementById('submit').addEventListener('click', function(event) {
                 });
 
                 const responseData = await response.json();
-               
+                
                 
                 if(responseData["data"]["payment"]["status"] == 0){
                   
@@ -318,6 +329,8 @@ document.getElementById('submit').addEventListener('click', function(event) {
                 
             } catch (error) {
                 console.error('Error:', error);
+            }finally{
+                loading.style.display = "none"
             }
         });
     }

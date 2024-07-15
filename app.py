@@ -2,11 +2,10 @@ from fastapi import *
 from fastapi.responses import FileResponse
 import  uvicorn
 from pydantic import BaseModel
-
+import re
 from typing import Optional
 from fastapi.responses import JSONResponse
 from mysql.connector import pooling
-import config
 from fastapi.staticfiles import StaticFiles
 import httpx
 import datetime
@@ -15,8 +14,16 @@ import jwt
 from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError
 
+from dotenv import load_dotenv  #取.env中設定的密碼，變成環境變數
+import os #讀取環境變數
 
-bookings_db = {}
+
+
+load_dotenv()
+#獲取環境變數的值
+db_user = os.getenv("db_user")
+db_password = os.getenv("db_password")
+partner_key = os.getenv("partner_key")
 
 
 app=FastAPI()
@@ -24,13 +31,12 @@ app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 dbconfig = {
     "database": 'Taipei_Attraction',
-    "user": "root",
-    "password": config.password,
+    "user": db_user,
+    "password": db_password,
     "host": "localhost"
 }
 cnxpool = pooling.MySQLConnectionPool(
-    pool_name="mypool",
-    pool_size=20,  
+    pool_name="mypool",  
     **dbconfig
 )
 def get_connection():
@@ -274,8 +280,11 @@ async def get_mrts():
 
 @app.post("/api/user")
 async def signup(user: User):
+    email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not user.name or not user.email or not user.password:
         return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
+    elif not re.match(email_regex, user.email):
+        return JSONResponse(content={"error": True, "message": "請輸入正確的電子信箱"})
     try:
         
         conn = get_connection()
@@ -315,8 +324,11 @@ async def check_user(user: str = Depends(verify_token)):
 #登入會員
 @app.put("/api/user/auth")
 async def signin(user:Member):
+    
+    if not user.email or not user.password:
+
+        return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
     try:
-        
         conn = get_connection()
         cursor = conn.cursor()
         sql = "SELECT id,email,name from users WHERE  email = %s and password = %s;"
@@ -324,10 +336,8 @@ async def signin(user:Member):
         cursor.execute(sql, params)
         records = cursor.fetchone()
         if records:
-            
             access_token = create_access_token(
                 data={
-                    
                     "id": records[0],
                     "email": records[1],
                     "name": records[2],    
@@ -470,8 +480,13 @@ async def delect_booking(user: str = Depends(verify_token)):
 @app.post("/api/orders")
 async def get_Prime(request: Request,user: str = Depends(verify_token)):
     data = await request.json() 
+    name = data["order"]["contact"]["name"]
+    email=data["order"]["contact"]["email"]
+    phone=data["order"]["contact"]["phone"]
    
-    try:
+    if not name or not email or not phone :
+        return JSONResponse(content={"error": True, "message": "請輸入完整資料"})
+    try:   
         conn = get_connection()
         cursor = conn.cursor()
         check_sql="SELECT orders.order_number FROM orders WHERE user_id=%s AND attraction_id=%s AND status='UNPAID';"
@@ -497,15 +512,15 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
     #發送給TapPay的資料
         post_data = {
             "prime": data["prime"],
-            "partner_key": "partner_jCN5Y386G0N04CFn8lnVxJWCqlYJVaeWH1zWXNJgxao6zsghDHIgWreu",
+            "partner_key": partner_key,
             "merchant_id": 'tppf_annie0121_GP_POS_1',
             "amount":int(data["order"]["price"]) ,
             "currency":"TWD",
             "details": data["order"]["trip"]["attraction"]["name"],
             "cardholder": {
-                "phone_number": data["order"]["contact"]["phone"],
-                "name": data["order"]["contact"]["name"],
-                "email": data["order"]["contact"]["email"]
+                "phone_number": phone,
+                "name": name,
+                "email": email
             },
             "remember": False
         }
@@ -547,7 +562,7 @@ async def get_Prime(request: Request,user: str = Depends(verify_token)):
                 }
             }
 
-        print(response_data)
+       
         return JSONResponse(content={"data": response_data})
     
     except Exception as e:

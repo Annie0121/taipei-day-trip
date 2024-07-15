@@ -50,6 +50,9 @@ export const changeLogin=()=>{
     })
 }
 
+//檢查信箱規則
+let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 //註冊資料給後端
 let signup= document.querySelector("#signupNew");
 export const checkSignup=()=>{
@@ -57,6 +60,10 @@ export const checkSignup=()=>{
         let name = document.getElementById("signupUname").value;
         let email = document.getElementById("signupEmail").value;
         let password = document.getElementById("signupPassword").value;
+        if (!emailRegex.test(email)) {
+            alert('請輸入正確的電子信箱');
+            signup.preventDefault(); 
+          }
         let response = await fetch('/api/user', {
             method: 'POST',
             headers: {
@@ -91,12 +98,34 @@ export const checkSignup=()=>{
     }) 
 }
  
+let failSignin = document.querySelector(".fail_signup");
+function errorMessage(){
+    document.getElementById("signinEmail").value =""
+    document.getElementById("signinPassword").value=""
+    if (failSignin) {
+        failSignin.remove();
+    }
+    failSignin = document.createElement("div");
+    failSignin.className = "fail_signup";
+    
+}
+
+
+
+
 //會員登入給後端
 let singin = document.querySelector("#singin");
 export const signinCheck=()=>{
     singin.addEventListener("click",async()=>{
         let email = document.querySelector("#signinEmail").value;
         let password = document.querySelector("#signinPassword").value;
+        
+        if(!email||!password){
+            errorMessage();
+            failSignin.textContent = "請輸入完整資料";
+            singin.insertAdjacentElement('afterend', failSignin);
+            return
+        }
         const response = await fetch('/api/user/auth', {
             method: 'PUT',
             headers: {
@@ -106,17 +135,9 @@ export const signinCheck=()=>{
         });
     
         const result = await response.json();
-        console.log(result);
         
         if(!result.token){
-            document.getElementById("signinEmail").value =""
-            document.getElementById("signinPassword").value=""
-            let failSignin = document.querySelector(".fail_signup");
-            if (failSignin) {
-                failSignin.remove();
-            }
-            failSignin = document.createElement("div");
-            failSignin.className = "fail_signup";
+            errorMessage();
             failSignin.textContent = result.message;
             singin.insertAdjacentElement('afterend', failSignin);
             
