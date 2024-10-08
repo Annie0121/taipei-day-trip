@@ -14,22 +14,16 @@ Taipei Day Trip 是一個幫助用戶發現並預訂台北景點的平台。它�
 
 
 ## 前端技術：
-HTML5
-CSS3（包含響應式設計）
-JavaScript
+HTML5、CSS3（包含響應式設計）、JavaScript
 
 ## 後端技術：
-Python
-FastAPI
-MySQL
-MVC 架構
+Python、FastAPI、MySQL、MVC 架構
 
 ## 身份驗證：
 JWT（JSON Web Tokens）
 
 ## 資料存儲：
-MySQL
-Amazon S3
+MySQL、Amazon S3
 
 
 ##  部署技術：
